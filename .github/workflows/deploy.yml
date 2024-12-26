@@ -45,6 +45,7 @@ jobs:
           path: ${{ github.workspace }}
       - name: Copy .env
         run: |
+          cd ${{ github.workspace }}
           cp .env.prod .env
           sed -i "s|{APP_KEY}|$APP_KEY|g" .env
           sed -i "s|{DB_USERNAME}|$DB_USERNAME|g" .env
