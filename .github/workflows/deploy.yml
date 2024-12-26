@@ -72,6 +72,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/it-backend/src
+            chmod -R 755 bootstrap
             php8.3 artisan migrate --force
             php8.3 artisan optimize
             chown -R www-data:www-data *
