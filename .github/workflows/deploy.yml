@@ -51,7 +51,7 @@ jobs:
       - name: Copy build to VPS
         if: ${{ success() }}
         run: |
-          rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/src
+          rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}/*  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/src
       - name: Deploy to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
@@ -65,3 +65,4 @@ jobs:
             php8.3 artisan migrate --force
             php8.3 artisan optimize
             chown -R www-data:www-data *
+            chown -R www-data:www-data .*
