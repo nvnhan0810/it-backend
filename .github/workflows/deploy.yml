@@ -45,6 +45,7 @@ jobs:
           echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
           touch ~/.ssh/known_hosts
           echo "$SSH_HOST $SSH_KEY" > ~/.ssh/known_hosts
+          cat ~/.ssh/known_hosts
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
