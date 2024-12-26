@@ -73,7 +73,7 @@ jobs:
       - name: Copy build to VPS
         if: ${{ success() }}
         run: |
-          mv ${{ github.workspace }} ~/src
+          cp -r ${{ github.workspace }} ~/src
           rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ~/src  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/src
       - name: Deploy to Server
         if: ${{ success() }}
@@ -85,9 +85,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/it-backend/src
-            mkdir -p bootstrap/cache
-            php8.3 artisan optimize:clear
             php8.3 artisan migrate --force
+            php8.3 artisan optimize:clear
             php8.3 artisan optimize
-            chown -R www-data:www-data *
-            chown -R www-data:www-data .*
+            chown -R www-data:www-data /var/www/html/it-backend/src
