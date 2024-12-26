@@ -40,6 +40,16 @@ jobs:
         with:
           name: build-artifact
           path: ${{ github.workspace }}
+      - name: Copy .env
+        run: |
+          cp .env.prod .env
+          sed -i "s|{APP_KEY}|$APP_KEY|g" .env
+          sed -i "s|{DB_USERNAME}|$DB_USERNAME|g" .env
+          sed -i "s|{DB_PASSWORD}|$DB_PASSWORD|g" .env
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       - name: Set up SSH private key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
