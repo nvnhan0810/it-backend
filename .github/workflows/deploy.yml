@@ -45,7 +45,6 @@ jobs:
           path: ${{ github.workspace }}
       - name: Copy .env
         run: |
-          cd ${{ github.workspace }}
           cp .env.prod .env
           sed -i "s|{APP_KEY}|$APP_KEY|g" .env
           sed -i "s|{DB_USERNAME}|$DB_USERNAME|g" .env
@@ -74,8 +73,8 @@ jobs:
       - name: Copy build to VPS
         if: ${{ success() }}
         run: |
-          ls -la ${{ github.workspace }}
           rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}/*  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/src
+          rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}/.*  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/src
       - name: Deploy to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
