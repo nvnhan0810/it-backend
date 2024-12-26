@@ -74,8 +74,6 @@ jobs:
         if: ${{ success() }}
         run: |
           rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/
-          rm -rf /var/www/html/it-backend/src
-          mv /var/www/html/it-backend/it-backend /var/www/html/it-backend/src
       - name: Deploy to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
@@ -85,6 +83,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            rm -rf /var/www/html/it-backend/src
+            mv /var/www/html/it-backend/it-backend /var/www/html/it-backend/src
             cd /var/www/html/it-backend/src
             php8.3 artisan migrate --force
             php8.3 artisan optimize:clear
