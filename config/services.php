@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'open_id' => [
+        'base_uri' => 'https://accounts.nvnhan0810.com',
+    ],
 
 ];
