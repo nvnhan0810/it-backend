@@ -14,4 +14,12 @@ class Post extends Model
     public function tags() {
         return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id')->withCount(['posts']);
     }
+
+    public function publicTags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id')
+            ->withCount(['posts' => function ($postQuery) {
+                $postQuery->where('is_published', true)->whereDate('published_at', '<=', now());
+            }]);
+    }
 }
