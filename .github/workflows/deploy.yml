@@ -3,8 +3,6 @@ name: Deploy
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -86,6 +84,8 @@ jobs:
             rm -rf /var/www/html/it-backend/src
             mv /var/www/html/it-backend/it-backend /var/www/html/it-backend/src
             cd /var/www/html/it-backend/src
+            rm -rf /var/www/html/it-backend/src/storage/logs
+            ln -s /var/www/html/it-backend/logs/ /var/www/html/it-backend/src/storage/
             php8.3 artisan migrate --force
             php8.3 artisan optimize:clear
             php8.3 artisan optimize
