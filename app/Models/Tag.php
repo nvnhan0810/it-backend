@@ -15,4 +15,11 @@ class Tag extends Model
     {
         return $this->belongsToMany(Post::class, 'post_tag', 'tag_id', 'post_id');
     }
+
+    public function publicPosts()
+    {
+        return $this->belongsToMany(Post::class, 'post_tag', 'tag_id', 'post_id')
+            ->where('is_published', true)
+            ->whereDate('published_at', '<=', now());
+    }
 }
