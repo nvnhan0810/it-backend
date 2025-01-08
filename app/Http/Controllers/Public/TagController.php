@@ -11,11 +11,11 @@ class TagController extends Controller
 {
     public function index()
     {
-        $data = Tag::withCount(['publicPosts'])->paginate(50);
+        $data = Tag::withCount(['publicPosts'])->get();
 
         return response()->json([
             'message' => 'Fetch Tags Successfully!',
-            ...$data->toArray(),
+            'data' => $data,
         ]);
     }
 
@@ -35,10 +35,14 @@ class TagController extends Controller
         ]);
     }
 
-    public function getPosts(string $slug)
+    public function getPosts(Request $request, string $slug)
     {
+        $search = $request->search;
+
         $posts = Post::where('is_published', true)->whereHas('publicTags', function($tagQuery) use ($slug) {
             $tagQuery->where('slug', $slug);
+        })->when($search, function ($searchQuery) use ($search) {
+            $searchQuery->where('title', 'LIKE', "%{$search}%");
         })->paginate(50);
 
         return response()->json([
