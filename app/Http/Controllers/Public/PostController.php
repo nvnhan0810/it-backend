@@ -16,7 +16,8 @@ class PostController extends Controller
             ->when($search, function($searchQuery) use ($search) {
                 $searchQuery->where('title', 'LIKE', "%{$search}%");
             })
-            ->orderBy('published_at')
+            ->orderBy('published_at', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->paginate(50);
 
         return response()->json([
