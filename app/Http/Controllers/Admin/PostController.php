@@ -8,14 +8,21 @@ use App\Http\Requests\Admin\CreatePostRequest;
 use App\Http\Requests\Admin\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    public function index() {
-        $posts = Post::with(['tags'])->orderBy('created_at', 'DESC')->get();
+    public function index(Request $request) {
+        $search = $request->search;
+
+        $posts = Post::with(['tags'])
+            ->when($search, function ($searchQuery) use($search) {
+                $searchQuery->where('title', 'LIKE', "%{$search}%");
+            })
+            ->orderBy('created_at', 'DESC')->get();
 
         return response()->json([
             'message' => 'Fetch posts successfully!',
