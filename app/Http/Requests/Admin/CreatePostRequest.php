@@ -23,6 +23,7 @@ class CreatePostRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
+            'description' => 'nullable|string',
             'content' => 'required|string',
             'is_published' => 'nullable|boolean',
             'published_at' => 'nullable|date',

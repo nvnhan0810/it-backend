@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Support\Str;
@@ -93,7 +94,10 @@ class PostController extends Controller
         $validatedData = $request->validated();
         unset($validatedData['tags']);
 
-        $post->update($validatedData);
+        $post->update([
+            ...$validatedData,
+            'description' => $validatedData['description'] ?? DB::raw('NULL'),
+        ]);
 
         if ($request->tags) {
             $tagIds = $this->getTagsInfo($request->tags);

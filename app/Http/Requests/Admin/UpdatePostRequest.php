@@ -23,6 +23,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
+            'description' => 'nullable|string',
             'content' => 'required|string',
             'is_published' => 'required|boolean',
             'published_at' => 'required|date',
