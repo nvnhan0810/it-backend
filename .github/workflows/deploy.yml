@@ -17,10 +17,14 @@ jobs:
           sed -i "s|{APP_KEY}|$APP_KEY|g" .env
           sed -i "s|{DB_USERNAME}|$DB_USERNAME|g" .env
           sed -i "s|{DB_PASSWORD}|$DB_PASSWORD|g" .env
+          sed -i "s|{GOOGLE_CLIENT_ID}|$GOOGLE_CLIENT_ID|g" .env
+          sed -i "s|{GOOGLE_CLIENT_SECRET}|$GOOGLE_CLIENT_SECRET|g" .env
         env:
           APP_KEY: ${{ secrets.APP_KEY }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
       - name: Install composer Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -47,10 +51,14 @@ jobs:
           sed -i "s|{APP_KEY}|$APP_KEY|g" .env
           sed -i "s|{DB_USERNAME}|$DB_USERNAME|g" .env
           sed -i "s|{DB_PASSWORD}|$DB_PASSWORD|g" .env
+          sed -i "s|{GOOGLE_CLIENT_ID}|$GOOGLE_CLIENT_ID|g" .env
+          sed -i "s|{GOOGLE_CLIENT_SECRET}|$GOOGLE_CLIENT_SECRET|g" .env
         env:
           APP_KEY: ${{ secrets.APP_KEY }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       - name: Set up SSH private key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -71,7 +79,7 @@ jobs:
       - name: Copy build to VPS
         if: ${{ success() }}
         run: |
-          rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/it-backend/
+          rsync -avz --progress --delete -e "ssh -i ~/.ssh/id_rsa" ${{ github.workspace }}  ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/html/nvnhan0810/
       - name: Deploy to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
@@ -81,12 +89,15 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            rm -rf /var/www/html/it-backend/src
-            mv /var/www/html/it-backend/it-backend /var/www/html/it-backend/src
-            cd /var/www/html/it-backend/src
-            rm -rf /var/www/html/it-backend/src/storage/logs
-            ln -s /var/www/html/it-backend/logs/ /var/www/html/it-backend/src/storage/
+            rm -rf /var/www/html/nvnhan0810/src
+            mv /var/www/html/nvnhan0810/it-backend /var/www/html/nvnhan0810/src
+            cd /var/www/html/nvnhan0810/src
+            rm -rf /var/www/html/nvnhan0810/src/storage/logs
+            ln -s /var/www/html/nvnhan0810/logs/ /var/www/html/nvnhan0810/src/storage/
             php8.3 artisan migrate --force
             php8.3 artisan optimize:clear
             php8.3 artisan optimize
-            chown -R www-data:www-data /var/www/html/it-backend/src
+            fnm use
+            npm ci
+            npm run build
+            chown -R www-data:www-data /var/www/html/nvnhan0810/src
