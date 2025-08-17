@@ -4,28 +4,27 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/ts/components/ui/button";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
 import { Pagination } from "@/ts/types/common";
-import { Post } from "@/ts/types/post";
+import { Tag } from "@/ts/types/tag";
 import { router } from "@inertiajs/react";
-import { format } from "date-fns";
 import { Plus } from "lucide-react";
 import { useRoute } from "ziggy-js";
 
 type Props = RootProps & {
-  posts: Pagination<Post>;
+  tags: Pagination<Tag>;
 }
 
-const ListPage = ({ auth, posts }: Props) => {
+const ListPage = ({ auth, tags }: Props) => {
   const route = useRoute();
 
   const handleDelete = (id: number) => {
-    router.delete(route('admin.posts.destroy', id), {
+    router.delete(route('admin.tags.destroy', id), {
       onSuccess: () => {
         router.reload();
       }
     });
   }
 
-  const DeleteButton = ({ id }: { id: number}) => {
+  const DeleteButton = ({ id }: { id: number }) => {
     return (
       <AlertDialog>
         <AlertDialogTrigger asChild>
@@ -33,9 +32,9 @@ const ListPage = ({ auth, posts }: Props) => {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Xoá bài viết</AlertDialogTitle>
+            <AlertDialogTitle>Xoá thẻ</AlertDialogTitle>
             <AlertDialogDescription>
-              Bạn thật sự muốn xóa bài viết này?
+              Bạn thật sự muốn xóa thẻ này?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -60,9 +59,9 @@ const ListPage = ({ auth, posts }: Props) => {
       <div>
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-gray-100 text-center">
-            Quản Lý bài viết
+            Quản Lý thẻ
           </h1>
-          <Button variant="outline" title="Thêm bài viết" onClick={() => router.get(route('admin.posts.create'))}>
+          <Button variant="outline" title="Thêm thẻ" onClick={() => router.get(route('admin.tags.create'))}>
             <Plus className="w-4 h-4" />
           </Button>
         </div>
@@ -73,26 +72,24 @@ const ListPage = ({ auth, posts }: Props) => {
 
         <div className="max-w-auto overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100 text-gray-900">
+            <thead className="bg-gray-100 text-gray-900 text-center">
               <tr>
                 <th className="px-4 py-2 border border-gray-400">ID</th>
-                <th className="px-4 py-2 border border-gray-400">Title</th>
-                <th className="px-4 py-2 border border-gray-400">Description</th>
-                <th className="px-4 py-2 border border-gray-400">Published At</th>
+                <th className="px-4 py-2 border border-gray-400">Tên</th>
+                <th className="px-4 py-2 border border-gray-400">Số lượng bài viết</th>
                 <th className="px-4 py-2 border border-gray-400">Actions</th>
               </tr>
             </thead>
             <tbody className="text-gray-300">
-              {posts.data.map((post) => (
-                <tr key={post.id}>
-                  <td className="px-4 py-2 border border-gray-300">{post.id}</td>
-                  <td className="px-4 py-2 border border-gray-300">{post.title}</td>
-                  <td className="px-4 py-2 border border-gray-300">{post.description}</td>
-                  <td className="px-4 py-2 border border-gray-300">{format(post.published_at, 'dd/MM/yyyy')}</td>
+              {tags.data.map((tag) => (
+                <tr key={tag.id}>
+                  <td className="px-4 py-2 border border-gray-300 text-center">{tag.id}</td>
+                  <td className="px-4 py-2 border border-gray-300">{tag.name}</td>
+                  <td className="px-4 py-2 border border-gray-300 text-center">{tag.posts_count}</td>
                   <td className="px-4 py-2 border border-gray-300">
-                    <div className="flex gap-2">
-                      <a href={route('admin.posts.edit', post.id)} className="text-blue-500">Edit</a>
-                      <DeleteButton id={post.id} />
+                    <div className="flex gap-2 justify-center items-center">
+                      <a href={route('admin.tags.edit', tag.id)} className="text-blue-500">Edit</a>
+                      {tag.posts_count === 0 && <DeleteButton id={tag.id} />}
                     </div>
                   </td>
                 </tr>
@@ -101,7 +98,7 @@ const ListPage = ({ auth, posts }: Props) => {
             <tfoot>
               <tr>
                 <td colSpan={6} className="p-4 text-center">
-                  <PaginationBar pagination={posts} />
+                  <PaginationBar pagination={tags} />
                 </td>
               </tr>
             </tfoot>

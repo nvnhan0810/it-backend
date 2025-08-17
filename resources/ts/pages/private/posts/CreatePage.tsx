@@ -2,6 +2,7 @@ import PostForm from "@/ts/components/posts/PostForm";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
 import { Post } from "@/ts/types/post";
 import { router } from "@inertiajs/react";
+import { format } from "date-fns";
 import { useRoute } from "ziggy-js";
 
 type Props = RootProps
@@ -12,6 +13,8 @@ const CreatePage = ({ auth }: Props) => {
   const handleCreate = (post: Post) => {
     router.post(route('admin.posts.store'), {
       ...post,
+      tags: post?.tags?.map((tag) => tag.name) ?? [],
+      published_at: post.published_at ? format(post.published_at, 'yyyy-MM-dd') : null,
     }, {
       onSuccess: () => {
         router.visit(route('admin.index'));

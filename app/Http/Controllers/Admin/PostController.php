@@ -39,6 +39,8 @@ class PostController extends Controller
         $slug = $this->generateSlugForPost($request->title);
 
         try {
+            DB::beginTransaction();
+
             $validatedData = $request->validated();
             unset($validatedData['tags']);
 
@@ -55,8 +57,12 @@ class PostController extends Controller
 
             $post->load(['tags']);
 
+            DB::commit();
+
             return redirect()->route('admin.index');
         } catch (Throwable $e) {
+            DB::rollBack();
+
             Log::info(__METHOD__, [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -75,31 +81,46 @@ class PostController extends Controller
     }
 
     public function update(UpdatePostRequest $request, int $id) {
-        $post = Post::find($id);
+        try {
+            DB::beginTransaction();
 
-        if (!$post) {
-            return response()->json([
-                'message' => 'Post Not Found',
-            ], 404);
+            $post = Post::find($id);
+
+            if (!$post) {
+                return response()->json([
+                    'message' => 'Post Not Found',
+                ], 404);
+            }
+
+            $validatedData = $request->validated();
+            unset($validatedData['tags']);
+
+            $post->update([
+                ...$validatedData,
+                'description' => $validatedData['description'] ?? DB::raw('NULL'),
+            ]);
+
+            if ($request->tags) {
+                $tagIds = $this->getTagsInfo($request->tags);
+
+                $post->tags()->sync($tagIds);
+            }
+
+            $post->load(['tags']);
+
+            DB::commit();
+
+            return redirect()->route('admin.index');
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            Log::info(__METHOD__, [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()->withErrors('Update post failed');
         }
-
-        $validatedData = $request->validated();
-        unset($validatedData['tags']);
-
-        $post->update([
-            ...$validatedData,
-            'description' => $validatedData['description'] ?? DB::raw('NULL'),
-        ]);
-
-        if ($request->tags) {
-            $tagIds = $this->getTagsInfo($request->tags);
-
-            $post->tags()->sync($tagIds);
-        }
-
-        $post->load(['tags']);
-
-        return redirect()->route('admin.index');
     }
 
     public function destroy(int $id) {
@@ -151,6 +172,7 @@ class PostController extends Controller
 
     private function getTagsInfo(array $tags) {
         $slugs = [];
+
         foreach($tags as $tag) {
             $slugs[] = SlugHelpers::createFromString($tag);
         }

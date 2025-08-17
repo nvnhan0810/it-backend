@@ -89,18 +89,21 @@ const usePostPreview = ({ initialPost }: Props) => {
       setErrors([...errorMessages]);
     }
 
-    console.log("body: ", body, errorMessages);
-
     setPost({
       id: 0,
       title: title,
-      slug: '',
+      slug: post?.slug ?? '',
       description: description,
       content: body,
-      tags: tags.length > 0 ? tags.map((tag) => ({
-        id: 0,
+      tags: tags.length > 0 ? tags.map((tag, index) => ({
+        id: index + 1,
         name: tag,
         slug: tag,
+      })) : [],
+      public_tags: tags.length > 0 ? tags.map((tag, index) => ({
+        id: index + 1,
+        name: tag,
+        slug: tag.toLowerCase().replace(/ /g, '-'),
       })) : [],
       published_at: (new Date()).toISOString(),
       is_published: false,
@@ -108,7 +111,7 @@ const usePostPreview = ({ initialPost }: Props) => {
   }
 
   const parsePostToContent = (post: Post) => {
-    let content = `# ${post.title}\n`;
+    let content = `# ${post.title}\n\n`;
 
     if (post.tags && post.tags.length > 0) {
       content += `Tags: ${post.tags.map((tag) => tag.name).join(',')}\n\n`;
@@ -118,7 +121,7 @@ const usePostPreview = ({ initialPost }: Props) => {
       content += `> ${post.description}\n\n`;
     }
 
-    content += `\n${post.content}`;
+    content += `${post.content}`;
 
     return content;
   }

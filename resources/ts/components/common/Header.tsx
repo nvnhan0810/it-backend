@@ -1,6 +1,6 @@
 import { AuthUser } from "@/ts/types/auth";
 import { Link, router } from "@inertiajs/react";
-import { BookOpenIcon, CircleUserRound, HomeIcon } from "lucide-react";
+import { BookOpenIcon, CircleUserRound, HomeIcon, TagIcon } from "lucide-react";
 import { useRoute } from "ziggy-js";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -15,9 +15,15 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
           <HomeIcon className="w-6 h-6" />
         </Link>
         {auth && (
-          <Link href={route('admin.index')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Quản lý bài viết">
-            <BookOpenIcon className="w-6 h-6" />
-          </Link>
+          <>
+            <Link href={route('admin.index')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Quản lý bài viết">
+              <BookOpenIcon className="w-6 h-6" />
+            </Link>
+            <Link href={route('admin.tags.index')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Quản lý thẻ">
+              <TagIcon className="w-6 h-6" />
+            </Link>
+
+          </>
         )}
       </div>
       <div className="flex gap-2">

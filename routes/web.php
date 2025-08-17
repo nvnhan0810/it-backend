@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Public\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminPostController::class, 'index'])->name('index');
 
     Route::resource('posts', AdminPostController::class)->except(['index', 'show']);
+
+    Route::resource('tags', AdminTagController::class)->except(['show', 'create', 'store']);
 })->middleware('auth');

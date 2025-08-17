@@ -1,6 +1,7 @@
 import usePostPreview from "@/ts/hooks/usePostPreview";
 import { Post } from "@/ts/types/post";
 import { Link } from "@inertiajs/react";
+import { format } from "date-fns";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRoute } from "ziggy-js";
@@ -73,7 +74,7 @@ const PostForm = ({ initialPost, onSave }: Props) => {
                 id="date"
                 className="w-48 justify-between font-normal"
               >
-                {post?.published_at ? new Date(post.published_at).toLocaleDateString() : "Select date"}
+                {post?.published_at ? format(post.published_at, 'dd/MM/yyyy') : "Chọn ngày"}
                 <ChevronDownIcon />
               </Button>
             </PopoverTrigger>

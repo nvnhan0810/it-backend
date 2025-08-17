@@ -13,9 +13,11 @@ const EditPage = ({ auth, post }: Props) => {
   const route = useRoute();
 
   const handleUpdate = (editedPost: Post) => {
+    console.log("editedPost: ", editedPost);
     router.patch(route('admin.posts.update', { id: post.id }), {
       ...editedPost,
       published_at: editedPost.published_at ? format(editedPost.published_at, 'yyyy-MM-dd') : null,
+      tags: editedPost?.tags?.map((tag) => tag.name) ?? [],
     }, {
       onSuccess: () => {
         router.visit(route('admin.index'));
