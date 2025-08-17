@@ -1,10 +1,12 @@
 import PaginationBar from "@/ts/components/common/PaginationBar";
 import SearchForm from "@/ts/components/posts/SearchForm";
+import TagBadge from "@/ts/components/tags/TabBadge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/ts/components/ui/alert-dialog";
 import { Button } from "@/ts/components/ui/button";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
 import { Pagination } from "@/ts/types/common";
 import { Post } from "@/ts/types/post";
+import { Tag } from "@/ts/types/tag";
 import { router } from "@inertiajs/react";
 import { format } from "date-fns";
 import { Plus } from "lucide-react";
@@ -78,6 +80,7 @@ const ListPage = ({ auth, posts }: Props) => {
                 <th className="px-4 py-2 border border-gray-400">ID</th>
                 <th className="px-4 py-2 border border-gray-400">Title</th>
                 <th className="px-4 py-2 border border-gray-400">Description</th>
+                <th className="px-4 py-2 border border-gray-400">Tags</th>
                 <th className="px-4 py-2 border border-gray-400">Published At</th>
                 <th className="px-4 py-2 border border-gray-400">Actions</th>
               </tr>
@@ -88,6 +91,13 @@ const ListPage = ({ auth, posts }: Props) => {
                   <td className="px-4 py-2 border border-gray-300">{post.id}</td>
                   <td className="px-4 py-2 border border-gray-300">{post.title}</td>
                   <td className="px-4 py-2 border border-gray-300">{post.description}</td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    <div className="flex gap-2">
+                      {post.tags.map((tag: Tag) => {
+                        return <TagBadge key={tag.id} tag={tag} useLink={false} />
+                      })}
+                    </div>
+                  </td>
                   <td className="px-4 py-2 border border-gray-300">{format(post.published_at, 'dd/MM/yyyy')}</td>
                   <td className="px-4 py-2 border border-gray-300">
                     <div className="flex gap-2">
