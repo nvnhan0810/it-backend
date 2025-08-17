@@ -3,7 +3,7 @@ import { Post } from "@/ts/types/post";
 import { Link } from "@inertiajs/react";
 import { format } from "date-fns";
 import { ChevronDownIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRoute } from "ziggy-js";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -20,6 +20,8 @@ type Props = {
 
 const PostForm = ({ initialPost, onSave }: Props) => {
   const route = useRoute();
+  const postDetailRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [doc, setDoc] = useState('');
   const [openDatePicker, setOpenDatePicker] = useState(false);
@@ -28,7 +30,6 @@ const PostForm = ({ initialPost, onSave }: Props) => {
   useEffect(() => {
     if (initialPost) {
       let result = parsePostToContent(initialPost);
-
       setDoc(result);
     }
   }, [initialPost]);
@@ -36,6 +37,37 @@ const PostForm = ({ initialPost, onSave }: Props) => {
   useEffect(() => {
     parseContentToPost(doc);
   }, [doc]);
+
+  // Sync textarea height with PostDetail height
+  useEffect(() => {
+    const syncHeight = () => {
+      if (postDetailRef.current && textareaRef.current) {
+        const postDetailHeight = postDetailRef.current.offsetHeight;
+        textareaRef.current.style.height = `${postDetailHeight}px`;
+      }
+    };
+
+    // Initial sync
+    syncHeight();
+
+    // Sync on window resize
+    window.addEventListener('resize', syncHeight);
+
+    // Use ResizeObserver to watch for PostDetail height changes
+    if (postDetailRef.current) {
+      const resizeObserver = new ResizeObserver(syncHeight);
+      resizeObserver.observe(postDetailRef.current);
+
+      return () => {
+        resizeObserver.disconnect();
+        window.removeEventListener('resize', syncHeight);
+      };
+    }
+
+    return () => {
+      window.removeEventListener('resize', syncHeight);
+    };
+  }, [post]);
 
   const handleSave = () => {
     if (post) {
@@ -98,12 +130,20 @@ const PostForm = ({ initialPost, onSave }: Props) => {
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex gap-4">
         <div className="w-1/2 flex flex-col gap-2">
-          <Textarea placeholder="Nhập tiêu đề" className="border-gray-700 min-h-[200px]" value={doc} onChange={(e) => setDoc(e.target.value)} />
+          <Textarea
+            ref={textareaRef}
+            placeholder="Nhập tiêu đề"
+            className="border-gray-700 resize-none overflow-y-auto min-h-[200px]"
+            value={doc}
+            onChange={(e) => setDoc(e.target.value)}
+          />
         </div>
         <div className="flex flex-col gap-2 px-4 w-1/2">
-          {post && <PostDetail post={post} />}
+          <div ref={postDetailRef}>
+            {post && <PostDetail post={post} />}
+          </div>
         </div>
       </div>
 

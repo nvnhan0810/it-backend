@@ -5,7 +5,7 @@ import PostContent from "./PostContent";
 
 type Props = {
   post: Post;
-  useTagLink: boolean;
+  useTagLink?: boolean;
 }
 
 const PostDetail = ({ post, useTagLink = false }: Props) => {
