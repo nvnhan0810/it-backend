@@ -12,11 +12,17 @@ class PostController extends Controller
 {
     public function index(Request $request) {
         $search = $request->search;
+        $tag = $request->tag;
 
         $data = Post::with(['publicTags'])->where('is_published', true)
             ->whereDate('published_at', '<=', now())
             ->when($search, function($searchQuery) use ($search) {
                 $searchQuery->where('title', 'LIKE', "%{$search}%");
+            })
+            ->when($tag, function($tagQuery) use ($tag) {
+                $tagQuery->whereHas('publicTags', function($tagQuery) use ($tag) {
+                    $tagQuery->where('slug', $tag);
+                });
             })
             ->orderBy('published_at', 'DESC')
             ->orderBy('created_at', 'DESC')

@@ -1,6 +1,6 @@
 import PaginationBar from "@/ts/components/common/PaginationBar";
 import SearchForm from "@/ts/components/posts/SearchForm";
-import TagBadge from "@/ts/components/tags/TabBadge";
+import TagBadge from "@/ts/components/tags/TagBadge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/ts/components/ui/alert-dialog";
 import { Button } from "@/ts/components/ui/button";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";

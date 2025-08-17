@@ -2,7 +2,7 @@ import { Post } from "@/ts/types/post";
 import { Tag } from "@/ts/types/tag";
 import { Link } from "@inertiajs/react";
 import { useRoute } from "ziggy-js";
-import TagBadge from "../tags/TabBadge";
+import TagBadge from "../tags/TagBadge";
 
 const PostListItem = ({ post }: { post: Post }) => {
   const routes = useRoute();
@@ -24,7 +24,7 @@ const PostListItem = ({ post }: { post: Post }) => {
       )}
 
       {post.public_tags != undefined && post.public_tags.length > 0 && (
-        <div className="flex overflow-auto gap-2">
+        <div className="flex flex-wrap overflow-auto gap-2">
           {post.public_tags.map((item: Tag) => (
             <TagBadge
               key={item.id}

@@ -1,7 +1,7 @@
 import PaginationBar from "@/ts/components/common/PaginationBar";
 import PostListItem from "@/ts/components/posts/PostListItem";
 import SearchForm from "@/ts/components/posts/SearchForm";
-import TagBadge from "@/ts/components/tags/TabBadge";
+import TagBadge from "@/ts/components/tags/TagBadge";
 import PublicLayout from "@/ts/layouts/PublicLayout";
 import { AuthUser } from "@/ts/types/auth";
 import { Pagination } from "@/ts/types/common";
@@ -44,7 +44,7 @@ const ListPage = ({ posts, tags, auth }: { posts: Pagination<Post>, tags: Tag[],
         <div className="pl-4 border-l border-gray-200 col-span-12 md:col-span-4 lg:col-span-3 2xl:col-span-2">
           <div className="flex flex-wrap gap-2">
             {tags.map((tag: Tag) => (
-              <TagBadge key={tag.id} tag={tag} useLink={false} />
+              <TagBadge key={tag.id} tag={tag} useLink={true} />
             ))}
           </div>
         </div>

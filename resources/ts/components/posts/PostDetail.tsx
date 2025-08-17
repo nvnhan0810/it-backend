@@ -1,6 +1,6 @@
 import { Post } from "@/ts/types/post";
 import { Tag } from "@/ts/types/tag";
-import TagBadge from "../tags/TabBadge";
+import TagBadge from "../tags/TagBadge";
 import PostContent from "./PostContent";
 
 const PostDetail = ({ post }: { post: Post }) => {

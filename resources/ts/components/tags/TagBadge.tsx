@@ -6,10 +6,10 @@ import { useRoute } from "ziggy-js";
 const TagBadge = ({ tag, classes = '', useLink = true }: { tag: Tag, classes?: string, useLink?: boolean, }) => {
   const routes = useRoute();
 
-  return useLink ? (
-    <Link href={routes('tags.show', { tag: tag.slug })}>
+  return (tag.public_posts_count == undefined || tag.public_posts_count > 0) && (useLink ? (
+    <Link href={routes('home', { tag: tag.slug })}>
       <span className={cn(
-        "inline-block border rounded-full px-3 py-1 text-sm hover:bg-gray-300 text-nowrap",
+        "inline-block border rounded-full px-3 py-1 text-sm hover:bg-gray-300 text-nowrap bg-gray-500 text-white hover:text-gray-900",
         classes
       )}>
         {tag.name.replace(/([a-z])([A-Z])/g, '$1 $2').trim()}
@@ -22,7 +22,7 @@ const TagBadge = ({ tag, classes = '', useLink = true }: { tag: Tag, classes?: s
     )}>
       {tag.name.replace(/([a-z])([A-Z])/g, '$1 $2').trim()}
     </span>
-  );
+  ));
 };
 
 export default TagBadge;
