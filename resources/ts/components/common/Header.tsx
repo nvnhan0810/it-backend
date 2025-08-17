@@ -1,6 +1,7 @@
+import { profile } from "@/ts/constants/me";
 import { AuthUser } from "@/ts/types/auth";
 import { Link, router } from "@inertiajs/react";
-import { BookOpenIcon, CircleUserRound, HomeIcon, TagIcon } from "lucide-react";
+import { BookOpenIcon, CircleUserRound, HomeIcon, MailIcon, TagIcon } from "lucide-react";
 import { useRoute } from "ziggy-js";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -11,15 +12,15 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
   return (
     <div className="flex gap-2 justify-between items-center">
       <div className="flex items-center gap-2">
-        <Link href={route('home')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Trang chủ">
+        <Link href={route('home')} className="text-gray-300 hover:text-gray-500 transition-colors duration-200 p-2" title="Trang chủ">
           <HomeIcon className="w-6 h-6" />
         </Link>
         {auth && (
           <>
-            <Link href={route('admin.index')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Quản lý bài viết">
+            <Link href={route('admin.index')} className="text-gray-300 hover:text-gray-500 transition-colors duration-200 p-2" title="Quản lý bài viết">
               <BookOpenIcon className="w-6 h-6" />
             </Link>
-            <Link href={route('admin.tags.index')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Quản lý thẻ">
+            <Link href={route('admin.tags.index')} className="text-gray-300 hover:text-gray-500 transition-colors duration-200 p-2" title="Quản lý thẻ">
               <TagIcon className="w-6 h-6" />
             </Link>
 
@@ -29,10 +30,11 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
       <div className="flex gap-2">
         {/* GitHub Icon */}
         <a
-          href="https://github.com"
+          href={profile.githubLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2"
+          className="text-gray-300 transition-colors duration-200 p-2 hover:text-gray-500"
+          title="GitHub"
         >
           <svg
             className="w-6 h-6"
@@ -50,10 +52,11 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
 
         {/* LinkedIn Icon */}
         <a
-          href="https://linkedin.com"
+          href={profile.linkedinLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2"
+          className="text-gray-300 transition-colors duration-200 p-2 hover:text-gray-500"
+          title="LinkedIn"
         >
           <svg
             className="w-6 h-6"
@@ -67,8 +70,13 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
           </svg>
         </a>
 
+        {/* Email Icon */}
+        <a href={`mailto:${profile.email}`} className="text-gray-300 transition-colors duration-200 p-2 hover:text-gray-500" title="Email">
+          <MailIcon className="w-6 h-6" />
+        </a>
+
         {!auth ? (
-          <a href={route('login')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2">
+          <a href={route('login')} className="text-gray-300 hover:text-gray-500 transition-colors duration-200 p-2">
             <CircleUserRound className="w-6 h-6 text-gray-300" />
           </a>
         ) : (
