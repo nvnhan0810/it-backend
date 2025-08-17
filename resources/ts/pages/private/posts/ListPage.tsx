@@ -1,4 +1,5 @@
 import PaginationBar from "@/ts/components/common/PaginationBar";
+import SearchForm from "@/ts/components/posts/SearchForm";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/ts/components/ui/alert-dialog";
 import { Button } from "@/ts/components/ui/button";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
@@ -45,6 +46,14 @@ const ListPage = ({ auth, posts }: Props) => {
     )
   }
 
+  const handleSearch = (search: string) => {
+    router.get(route('admin.index'), { search: search }, {
+      preserveUrl: true,
+      preserveScroll: true,
+      replace: true,
+    });
+  }
+
   return (
     <PrivateLayout auth={auth}>
       <div>
@@ -55,6 +64,10 @@ const ListPage = ({ auth, posts }: Props) => {
           <Button variant="outline" title="Thêm bài viết" onClick={() => router.get(route('admin.posts.create'))}>
             <Plus className="w-4 h-4" />
           </Button>
+        </div>
+
+        <div className="mb-4 flex justify-start items-center gap-2">
+          <SearchForm onSearch={handleSearch} />
         </div>
 
         <div className="max-w-auto overflow-x-auto">

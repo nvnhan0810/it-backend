@@ -1,6 +1,6 @@
 import { AuthUser } from "@/ts/types/auth";
-import { router } from "@inertiajs/react";
-import { CircleUserRound } from "lucide-react";
+import { Link, router } from "@inertiajs/react";
+import { BookOpenIcon, CircleUserRound, HomeIcon } from "lucide-react";
 import { useRoute } from "ziggy-js";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -9,8 +9,18 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
   const route = useRoute();
 
   return (
-    <div className="flex gap-2">
-      <div className="flex-grow flex items-center justify-center gap-2 text-white">
+    <div className="flex gap-2 justify-between items-center">
+      <div className="flex items-center gap-2">
+        <Link href={route('home')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Trang chủ">
+          <HomeIcon className="w-6 h-6" />
+        </Link>
+        {auth && (
+          <Link href={route('admin.index')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2" title="Quản lý bài viết">
+            <BookOpenIcon className="w-6 h-6" />
+          </Link>
+        )}
+      </div>
+      <div className="flex gap-2">
         {/* GitHub Icon */}
         <a
           href="https://github.com"
@@ -50,8 +60,7 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
             />
           </svg>
         </a>
-      </div>
-      <div>
+
         {!auth ? (
           <a href={route('login')} className="text-gray-300 hover:text-gray-900 transition-colors duration-200 p-2">
             <CircleUserRound className="w-6 h-6 text-gray-300" />
