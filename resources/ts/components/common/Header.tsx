@@ -1,4 +1,4 @@
-import { profile } from "@/ts/constants/me";
+import { profile } from "@/ts/constants/profile";
 import { AuthUser } from "@/ts/types/auth";
 import { Link, router } from "@inertiajs/react";
 import { BookOpenIcon, CircleUserRound, HomeIcon, MailIcon, TagIcon } from "lucide-react";
