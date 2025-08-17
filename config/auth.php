@@ -18,6 +18,12 @@ return [
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
+    'valid_emails' => [
+        'nguyenvannhan0810@gmail.com',
+        'nguyenvannhan0810.it@gmail.com',
+        'n_vannhan@thk-hd.vn',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards

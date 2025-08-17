@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\CommonHelpers;
+use App\Helpers\SlugHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreatePostRequest;
 use App\Http\Requests\Admin\UpdatePostRequest;
@@ -143,7 +143,7 @@ class PostController extends Controller
     }
 
     private function generateSlugForPost(string $title) {
-        $slug = CommonHelpers::createSlugFromString($title);
+        $slug = SlugHelpers::createFromString($title);
 
         $post = Post::where('slug', 'like', "$slug-%")
             ->orderBy('id', 'DESC')
@@ -153,9 +153,9 @@ class PostController extends Controller
             $index = Str::afterLast($post->slug, '-');
 
             if (is_numeric($index)) {
-                $slug = CommonHelpers::createSlugFromString($title, ((int) $index) + 1);
+                $slug = SlugHelpers::createFromString($title, ((int) $index) + 1);
             } else {
-                $slug = CommonHelpers::createSlugFromString($post->slug, 1);
+                $slug = SlugHelpers::createFromString($post->slug, 1);
             }
         }
 
@@ -165,7 +165,7 @@ class PostController extends Controller
     private function getTagsInfo(array $tags) {
         $slugs = [];
         foreach($tags as $tag) {
-            $slugs[] = CommonHelpers::createSlugFromString($tag);
+            $slugs[] = SlugHelpers::createFromString($tag);
         }
 
         $dbTags = Tag::whereIn('slug', $slugs)->get();
