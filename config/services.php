@@ -37,5 +37,9 @@ return [
     'open_id' => [
         'base_uri' => 'https://accounts.nvnhan0810.com',
     ],
-
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URL'),
+    ],
 ];

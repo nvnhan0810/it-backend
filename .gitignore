@@ -21,3 +21,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+.qodo
+ziggy.js
+ziggy.ts
+ziggy.d.ts

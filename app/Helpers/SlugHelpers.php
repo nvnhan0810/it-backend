@@ -4,8 +4,8 @@ namespace App\Helpers;
 
 use Illuminate\Support\Str;
 
-class CommonHelpers {
-    public static function createSlugFromString(string $value, int $index = 0): string {
+class SlugHelpers {
+    public static function createFromString(string $value, int $index = 0): string {
         $result = Str::slug($value, '-');
 
         if ($index) {

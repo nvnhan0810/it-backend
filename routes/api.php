@@ -6,13 +6,13 @@ use App\Http\Controllers\Public\TagController;
 use App\Http\Middleware\OpenIdMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{slug}', [PostController::class, 'show']);
+// Route::get('/posts', [PostController::class, 'index']);
+// Route::get('/posts/{slug}', [PostController::class, 'show']);
 
-Route::get('/tags', [TagController::class, 'index']);
-Route::get('/tags/{slug}', [TagController::class, 'show']);
-Route::get('/tags/{slug}/posts', [TagController::class, 'getPosts']);
+// Route::get('/tags', [TagController::class, 'index']);
+// Route::get('/tags/{slug}', [TagController::class, 'show']);
+// Route::get('/tags/{slug}/posts', [TagController::class, 'getPosts']);
 
-Route::middleware([OpenIdMiddleware::class])->prefix('admin')->group(function() {
-    Route::apiResource('/posts', AdminPostController::class);
-});
+// Route::middleware([OpenIdMiddleware::class])->prefix('admin')->group(function() {
+//     Route::apiResource('/posts', AdminPostController::class);
+// });
