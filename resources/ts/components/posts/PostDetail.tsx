@@ -3,7 +3,12 @@ import { Tag } from "@/ts/types/tag";
 import TagBadge from "../tags/TagBadge";
 import PostContent from "./PostContent";
 
-const PostDetail = ({ post }: { post: Post }) => {
+type Props = {
+  post: Post;
+  useTagLink: boolean;
+}
+
+const PostDetail = ({ post, useTagLink = false }: Props) => {
   return (
     <>
       <h1 className="text-2xl font-bold text-gray-100 mb-4">{post.title}</h1>
@@ -12,7 +17,7 @@ const PostDetail = ({ post }: { post: Post }) => {
       {post.public_tags != undefined && post.public_tags?.length > 0 ? (
         <div className="mt-4 flex flex-wrap gap-2">
           {post.public_tags.map((item: Tag) => (
-            <TagBadge key={item.id} tag={item} useLink={false} />
+            <TagBadge key={item.id} tag={item} useLink={useTagLink} />
           ))}
         </div>
       ) : <></>}

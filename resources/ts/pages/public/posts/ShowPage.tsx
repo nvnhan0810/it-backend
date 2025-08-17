@@ -12,7 +12,7 @@ const PostDetailPage = ({ post, auth }: Props) => {
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 md:col-span-3"></div>
         <div className="col-span-12 md:col-span-6">
-          <PostDetail post={post} />
+          <PostDetail post={post} useTagLink={true} />
         </div>
       <div className="col-span-12 md:col-span-3"></div>
     </div>
