@@ -8,5 +8,5 @@ export type Post = {
   content: string;
   published_at: string;
   is_published: boolean;
-  tags: Tag[];
+  public_tags: Tag[];
 };

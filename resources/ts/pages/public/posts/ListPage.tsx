@@ -1,4 +1,4 @@
-import PagiantionBar from "@/ts/components/common/PaginationBar";
+import PaginationBar from "@/ts/components/common/PaginationBar";
 import PostListItem from "@/ts/components/posts/PostListItem";
 import TagBadge from "@/ts/components/tags/TabBadge";
 import RootLayout from "@/ts/layouts/RootLayout";
@@ -22,7 +22,7 @@ const ListPage = ({ posts, tags, auth }: { posts: Pagination<Post>, tags: Tag[],
 
           </div>
           <div className="flex items-center justify-center my-3">
-            <PagiantionBar lastPage={10} currentPage={1} query={''} />
+            <PaginationBar pagination={posts} />
           </div>
         </div>
         <div className="pl-4 border-l border-gray-200 col-span-12 md:col-span-4 lg:col-span-3 2xl:col-span-2">

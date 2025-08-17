@@ -4,11 +4,9 @@ import { useRoute } from "ziggy-js";
 const Header = ({ auth }: { auth: AuthUser | null }) => {
   const route = useRoute();
 
-  console.log(auth);
-
   return (
     <div className="flex gap-2">
-      <div className="flex-grow flex items-center justify-center gap-2 text-white mb-4">
+      <div className="flex-grow flex items-center justify-center gap-2 text-white">
         {/* GitHub Icon */}
         <a
           href="https://github.com"

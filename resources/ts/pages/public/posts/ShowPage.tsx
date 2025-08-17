@@ -2,6 +2,7 @@ import PostContent from "@/ts/components/posts/PostContent";
 import TagBadge from "@/ts/components/tags/TabBadge";
 import RootLayout, { RootProps } from "@/ts/layouts/RootLayout";
 import { Post } from "@/ts/types/post";
+import { Tag } from "@/ts/types/tag";
 
 type Props = RootProps & {
   post: Post;
@@ -16,18 +17,18 @@ const PostDetailPage = ({ post, auth }: Props) => {
           <h1 className="text-2xl font-bold text-gray-100 mb-4">{post.title}</h1>
           <hr />
 
-          {post.tags != undefined && post.tags?.length > 0 ? (
+          {post.public_tags != undefined && post.public_tags?.length > 0 ? (
             <div className="mt-4 flex flex-wrap gap-2">
-              {post.tags.map((item) => (
-                <TagBadge key={item.id} tag={item} />
+              {post.public_tags.map((item: Tag) => (
+                <TagBadge key={item.id} tag={item} useLink={false} />
               ))}
             </div>
           ) : <></>}
 
           {post.description && (
-            <p className='pb-4 mb-6 text-foreground/70 text-sm italic'>{post.description}</p>
+            <p className='py-4 mb-6 text-gray-300 text-sm italic'>{post.description}</p>
           )}
-          <div className="mt-4 text-gray-300">
+          <div className="mt-4">
             <PostContent doc={post.content} />
           </div>
         </div>

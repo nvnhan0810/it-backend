@@ -1,0 +1,70 @@
+// Custom styles for react-markdown-preview
+.markdown-body {
+  // Override default background colors
+  --bgColor-default: transparent !important;
+  --bgColor-muted: rgba(255, 255, 255, 0.05) !important;
+  --bgColor-emphasis: rgba(255, 255, 255, 0.1) !important;
+
+  // Dark theme text colors
+  --color-default: #e5e7eb !important;
+  --color-muted: #9ca3af !important;
+  --color-emphasis: #f3f4f6 !important;
+
+  // Code block styling
+  --bgColor-code: rgba(0, 0, 0, 0.3) !important;
+  --color-code: #e5e7eb !important;
+
+  // Border colors
+  --color-border: rgba(255, 255, 255, 0.1) !important;
+
+  // Link colors
+  --color-link: #60a5fa !important;
+  --color-link-hover: #93c5fd !important;
+}
+
+// Additional dark theme overrides
+.markdown-container .markdown-body {
+  background: transparent !important;
+  color: var(--color-default) !important;
+
+  // Headings
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-emphasis) !important;
+    border-bottom-color: var(--color-border) !important;
+  }
+
+  // Code blocks
+  pre {
+    background: var(--bg-color-code) !important;
+    border: 1px solid var(--color-border) !important;
+  }
+
+  code {
+    background: var(--bg-color-muted) !important;
+    color: var(--color-code) !important;
+  }
+
+  // Blockquotes
+  blockquote {
+    border-left-color: var(--color-border) !important;
+    background: var(--bg-color-muted) !important;
+  }
+
+  // Tables
+  table {
+    border-color: var(--color-border) !important;
+
+    th, td {
+      border-color: var(--color-border) !important;
+    }
+
+    tr:nth-child(2n) {
+      background: var(--bg-color-muted) !important;
+    }
+  }
+
+  // Horizontal rules
+  hr {
+    border-color: var(--color-border) !important;
+  }
+}

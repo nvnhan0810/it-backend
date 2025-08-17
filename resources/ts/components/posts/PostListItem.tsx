@@ -11,9 +11,9 @@ const PostListItem = ({ post }: { post: Post }) => {
     <Link
       key={post.id}
       href={routes('posts.show', { slug: post.slug })}
-      className="block bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-lg p-5 shadow-sm hover:shadow-md hover:bg-white/90 transition-all duration-200 overflow-hidden"
+      className="block bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-lg p-5 shadow-sm hover:shadow-md hover:bg-white/90 transition-all duration-200 overflow-hidden flex flex-col justify-between"
     >
-      <h2 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-200">
+      <h2 className="line-clamp-2 text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-200">
         {post.title}
       </h2>
 
@@ -23,13 +23,13 @@ const PostListItem = ({ post }: { post: Post }) => {
         </p>
       )}
 
-      {post.tags != undefined && post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {post.tags.map((item: Tag) => (
+      {post.public_tags != undefined && post.public_tags.length > 0 && (
+        <div className="flex overflow-auto gap-2">
+          {post.public_tags.map((item: Tag) => (
             <TagBadge
               key={item.id}
               tag={item}
-              classes="text-xs bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 transition-colors duration-200"
+              classes="text-xs bg-gray-100 text-gray-700 border-gray-200 text-gray-300"
               useLink={false}
             />
           ))}
