@@ -1,7 +1,7 @@
 import PaginationBar from "@/ts/components/common/PaginationBar";
 import PostListItem from "@/ts/components/posts/PostListItem";
 import TagBadge from "@/ts/components/tags/TabBadge";
-import RootLayout from "@/ts/layouts/RootLayout";
+import PublicLayout from "@/ts/layouts/PublicLayout";
 import { AuthUser } from "@/ts/types/auth";
 import { Pagination } from "@/ts/types/common";
 import { Tag } from "@/ts/types/tag";
@@ -12,7 +12,7 @@ const ListPage = ({ posts, tags, auth }: { posts: Pagination<Post>, tags: Tag[],
   const { data } = posts;
 
   return (
-    <RootLayout auth={auth}>
+    <PublicLayout auth={auth}>
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 md:col-span-8 lg:col-span-9 2xl:col-span-10 flex flex-col gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -33,7 +33,7 @@ const ListPage = ({ posts, tags, auth }: { posts: Pagination<Post>, tags: Tag[],
           </div>
         </div>
       </div>
-    </RootLayout>
+    </PublicLayout>
   );
 };
 

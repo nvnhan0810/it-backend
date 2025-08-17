@@ -7,11 +7,11 @@ export type RootProps = {
   auth: AuthUser | null;
 }
 
-type RootLayoutProps = RootProps & {
+type PrivateLayoutProps = RootProps & {
   children: React.ReactNode;
 };
 
-const RootLayout = ({ children, auth }: RootLayoutProps) => {
+const PrivateLayout = ({ children, auth }: PrivateLayoutProps) => {
   return (
     <div className="bg-gray-800 min-h-screen bg-background font-sans antialiased scroll-smooth scroll-pt-24 p-4">
       <Header auth={auth} />
@@ -23,4 +23,4 @@ const RootLayout = ({ children, auth }: RootLayoutProps) => {
   );
 };
 
-export default RootLayout;
+export default PrivateLayout;

@@ -1,6 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
 
+import Providers from './providers';
 import { Ziggy } from './utils/ziggy';
 (globalThis as any).Ziggy = Ziggy;
 
@@ -11,7 +12,9 @@ createInertiaApp({
   },
   setup({ el, App, props }) {
     createRoot(el).render(
+      <Providers>
         <App {...props} />
+      </Providers>
     )
   },
 })

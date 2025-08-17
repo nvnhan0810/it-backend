@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -23,27 +24,15 @@ class PostController extends Controller
             ->when($search, function ($searchQuery) use($search) {
                 $searchQuery->where('title', 'LIKE', "%{$search}%");
             })
-            ->orderBy('created_at', 'DESC')->get();
+            ->orderBy('created_at', 'DESC')->paginate(50);
 
-        return response()->json([
-            'message' => 'Fetch posts successfully!',
-            'data' => $posts,
+        return Inertia::render('private/posts/ListPage', [
+            'posts' => $posts,
         ]);
     }
 
-    public function show(int $id) {
-        $post = Post::with(['tags'])->find($id);
-
-        if (!$post) {
-            return response()->json([
-                'message' => 'Post Not Found',
-            ], 404);
-        }
-
-        return response()->json([
-            'message' => 'Fetch Post successfully!',
-            'data' => $post,
-        ]);
+    public function create() {
+        return Inertia::render('private/posts/CreatePage');
     }
 
     public function store(CreatePostRequest $request) {
@@ -66,20 +55,23 @@ class PostController extends Controller
 
             $post->load(['tags']);
 
-            return response()->json([
-                'message' => 'Create post successfully!',
-                'data' => $post->refresh(),
-            ]);
+            return redirect()->route('admin.index');
         } catch (Throwable $e) {
             Log::info(__METHOD__, [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return response()->json([
-                'message' => 'Create post failed',
-            ], 400);
+            return back()->withErrors('Create post failed');
         }
+    }
+
+    public function edit(int $id) {
+        $post = Post::with(['tags'])->findOrFail($id);
+
+        return Inertia::render('private/posts/EditPage', [
+            'post' => $post,
+        ]);
     }
 
     public function update(UpdatePostRequest $request, int $id) {
@@ -107,10 +99,7 @@ class PostController extends Controller
 
         $post->load(['tags']);
 
-        return response()->json([
-            'message' => 'Update Post Successfully!',
-            'data' => $post->refresh(),
-        ]);
+        return redirect()->route('admin.index');
     }
 
     public function destroy(int $id) {
@@ -127,9 +116,7 @@ class PostController extends Controller
 
             $post->delete();
 
-            return response()->json([
-                'message' => 'Delete Post Successfully',
-            ]);
+            return redirect()->route('admin.index');
         } catch (Throwable $e) {
             Log::info(__METHOD__, [
                 'message' => $e->getMessage(),
