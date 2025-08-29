@@ -10,6 +10,11 @@ class Post extends Model
         'title', 'slug', 'description', 'content', 'published_at', 'is_published',
     ];
 
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_published' => 'boolean',
+    ];
+
     /***** RELATIONSHIPS *****/
     public function tags() {
         return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id')->withCount(['posts']);

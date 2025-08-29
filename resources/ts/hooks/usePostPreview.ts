@@ -90,23 +90,27 @@ const usePostPreview = ({ initialPost }: Props) => {
     }
 
     setPost({
-      id: 0,
-      title: title,
-      slug: post?.slug ?? '',
-      description: description,
-      content: body,
-      tags: tags.length > 0 ? tags.map((tag, index) => ({
-        id: index + 1,
-        name: tag,
-        slug: tag,
-      })) : [],
-      public_tags: tags.length > 0 ? tags.map((tag, index) => ({
-        id: index + 1,
-        name: tag,
-        slug: tag.toLowerCase().replace(/ /g, '-'),
-      })) : [],
-      published_at: (new Date()).toISOString(),
-      is_published: false,
+      ...(post ?? {
+        id: 0,
+        published_at: (new Date()).toISOString(),
+        is_published: false,
+      }),
+      ...{
+        title: title,
+        slug: post?.slug ?? '',
+        description: description,
+        content: body,
+        tags: tags.length > 0 ? tags.map((tag, index) => ({
+          id: index + 1,
+          name: tag,
+          slug: tag,
+        })) : [],
+        public_tags: tags.length > 0 ? tags.map((tag, index) => ({
+          id: index + 1,
+          name: tag,
+          slug: tag.toLowerCase().replace(/ /g, '-'),
+        })) : [],
+      }
     });
   }
 
