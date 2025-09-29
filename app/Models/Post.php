@@ -27,4 +27,9 @@ class Post extends Model
                 $postQuery->where('is_published', true)->whereDate('published_at', '<=', now());
             }]);
     }
+
+    public function series()
+    {
+        return $this->belongsToMany(Series::class, 'series_posts', 'post_id', 'series_id')->orderBy('order');
+    }
 }
