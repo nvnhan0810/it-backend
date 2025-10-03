@@ -12,12 +12,13 @@ import { Plus } from "lucide-react";
 import { useRoute } from "ziggy-js";
 
 type Props = RootProps & {
-  series: Pagination<Series>;
+  series: Pagination<Series & { posts_count: number }>;
   auth: AuthUser;
 }
 
 const ListPage = ({ auth, series }: Props) => {
   const route = useRoute();
+  console.log(series);
 
   const handleDelete = (id: number) => {
     router.delete(route('admin.posts.destroy', id), {
@@ -79,7 +80,6 @@ const ListPage = ({ auth, series }: Props) => {
               <tr>
                 <th className="px-4 py-2 border border-gray-400">ID</th>
                 <th className="px-4 py-2 border border-gray-400">Name</th>
-                <th className="px-4 py-2 border border-gray-400">Description</th>
                 <th className="px-4 py-2 border border-gray-400">Post Count</th>
                 <th className="px-4 py-2 border border-gray-400">Created At</th>
                 <th className="px-4 py-2 border border-gray-400">Actions</th>
@@ -90,9 +90,8 @@ const ListPage = ({ auth, series }: Props) => {
                 <tr key={seriesItem.id}>
                   <td className="px-4 py-2 border border-gray-300">{seriesItem.id}</td>
                   <td className="px-4 py-2 border border-gray-300">{seriesItem.name}</td>
-                  <td className="px-4 py-2 border border-gray-300">{seriesItem.description}</td>
                   <td className="px-4 py-2 border border-gray-300">
-                    {seriesItem.posts.length}
+                    {seriesItem.posts_count}
                   </td>
                   <td className="px-4 py-2 border border-gray-300">{format(seriesItem.created_at, 'dd/MM/yyyy')}</td>
                   <td className="px-4 py-2 border border-gray-300">

@@ -6,16 +6,17 @@
   "tailwind": {
     "config": "tailwind.config.ts",
     "css": "resources/sass/app.scss",
-    "baseColor": "gray",
+    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "lucide",
   "aliases": {
-    "components": "@components",
-    "utils": "@ts/utils",
-    "ui": "@components/ui",
-    "lib": "@ts/utils",
-    "hooks": "@ts/hooks"
+    "components": "@/ts/components",
+    "utils": "@/ts/utils/index",
+    "ui": "@/ts/components/ui",
+    "lib": "@/ts/utils",
+    "hooks": "@/ts/hooks"
   },
-  "iconLibrary": "lucide"
+  "registries": {}
 }

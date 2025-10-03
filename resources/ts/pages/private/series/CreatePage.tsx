@@ -1,26 +1,79 @@
+import { Button } from "@/ts/components/ui/button";
+import Combobox from "@/ts/components/ui/combobox";
 import { Input } from "@/ts/components/ui/input";
+import { Label } from "@/ts/components/ui/label";
+import { Textarea } from "@/ts/components/ui/textarea";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
 import { Post } from "@/ts/types/post";
 import { router } from "@inertiajs/react";
-import { format } from "date-fns";
+import { PlusIcon, TrashIcon } from "lucide-react";
+import { useState } from "react";
 import { useRoute } from "ziggy-js";
 
-type Props = RootProps
+type Props = RootProps & {
+  posts: Post[];
+}
 
-const CreatePage = ({ auth }: Props) => {
+type SeriesPost = {
+  order: number;
+  post: Post;
+}
+
+const CreatePage = ({ auth, posts }: Props) => {
   const route = useRoute();
 
-  const handleCreate = (post: Post) => {
-    router.post(route('admin.posts.store'), {
-      ...post,
-      tags: post?.tags?.map((tag) => tag.name) ?? [],
-      published_at: post.published_at ? format(post.published_at, 'yyyy-MM-dd') : null,
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [seriesPosts, setSeriesPosts] = useState<SeriesPost[]>([]);
+
+  const handleAddNewPostRow = () => {
+    const newPostRow: SeriesPost = {
+      order: seriesPosts.length + 1,
+      post: {
+        id: 0,
+        title: '',
+        slug: '',
+        description: '',
+        content: '',
+        published_at: '',
+        is_published: false,
+        tags: [],
+      },
+    }
+
+    setSeriesPosts([...seriesPosts, newPostRow]);
+  }
+
+  const handleChangeOrder = (order: string, index: number) => {
+    if (typeof order !== 'number' || order === '' || order < 1) {
+      return;
+    }
+
+    setSeriesPosts(seriesPosts.map((post, i) => i === index ? { ...post, order: parseInt(order) } : post));
+  }
+
+  const handleChangePost = (id: string, index: number) => {
+    setSeriesPosts(seriesPosts.map((post, i) => i === index ? { ...post, post: { ...post.post, id: parseInt(id) } } : post));
+  }
+
+  const handleDeletePost = (index: number) => {
+    setSeriesPosts(seriesPosts.filter((_, i) => i !== index));
+  }
+
+  const handleCreate = () => {
+    router.post(route('admin.series.store'), {
+      name: title,
+      description: description,
+      'posts': seriesPosts.map((seriesPost) => ({
+        order: seriesPost.order,
+        post_id: seriesPost.post.id,
+      })),
     }, {
       onSuccess: () => {
-        router.visit(route('admin.index'));
+        router.visit(route('admin.series.index'));
       },
       onError: (errors) => {
-        console.error('Create post failed:', errors);
+        console.error('Create series failed:', errors);
       }
     });
   }
@@ -29,7 +82,39 @@ const CreatePage = ({ auth }: Props) => {
     <PrivateLayout auth={auth}>
       <h2 className="text-2xl font-bold text-gray-100 text-center">Series mới</h2>
       <div className="flex flex-col gap-4 mt-4">
-        <Input name="name" placeholder="Tên series" />
+        <div className="mb-2">
+          <Input name="name" placeholder="Tên series" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+        <div className="mb-2">
+          <Textarea name="description" placeholder="Mô tả series" value={description} onChange={(e) => setDescription(e.target.value)} />
+        </div>
+
+        <div className="flex justify-between">
+          <Label className="text-gray-100">Bài viết</Label>
+          <Button variant="outline" title="Thêm bài viết" onClick={() => handleAddNewPostRow()}>
+            <PlusIcon className="w-4 h-4" />
+          </Button>
+        </div>
+
+        <div className="flex flex-col gap-2">
+            {seriesPosts.map((seriesPost, index) => (
+              <div key={`series-post-${index}`} className="flex justify-between gap-2">
+                <Combobox options={posts.map((post) => ({
+                  value: post.id.toString(),
+                  label: post.title,
+                }))}
+                handleChange={(value) => handleChangePost(value, index)}
+                />
+                <Input name="order" placeholder="Thứ tự" value={seriesPost.order} onChange={(e) => handleChangeOrder(e.target.value, index)} />
+                <Button variant="outline" title="Xóa bài viết" onClick={() => handleDeletePost(index)}>
+                  <TrashIcon className="w-4 h-4" />
+                </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-center mt-4">
+        <Button onClick={handleCreate}>Tạo series</Button>
       </div>
     </PrivateLayout>
   );

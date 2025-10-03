@@ -13,7 +13,7 @@ type PublicLayoutProps = RootProps & {
 
 const PublicLayout = ({ children, auth }: PublicLayoutProps) => {
   return (
-    <div className="bg-gray-800 min-h-screen bg-background font-sans antialiased scroll-smooth scroll-pt-24 p-4">
+    <div className="min-h-screen bg-background font-sans antialiased scroll-smooth scroll-pt-24 p-4">
       <Header auth={auth} />
       <div className="py-4 flex-grow">
         {children}
