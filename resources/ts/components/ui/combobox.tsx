@@ -27,11 +27,11 @@ type Option = {
 type Props = {
   options: Option[];
   handleChange: (value: string) => void;
+  value: string;
 }
 
-const Combobox = ({ options, handleChange }: Props) => {
+const Combobox = ({ options, handleChange, value }: Props) => {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -59,7 +59,6 @@ const Combobox = ({ options, handleChange }: Props) => {
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
                     handleChange(currentValue)
                     setOpen(false)
                   }}

@@ -21,7 +21,7 @@ const ListPage = ({ auth, series }: Props) => {
   console.log(series);
 
   const handleDelete = (id: number) => {
-    router.delete(route('admin.posts.destroy', id), {
+    router.delete(route('admin.series.destroy', id), {
       onSuccess: () => {
         router.reload();
       }
@@ -36,9 +36,9 @@ const ListPage = ({ auth, series }: Props) => {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Xoá bài viết</AlertDialogTitle>
+            <AlertDialogTitle>Xoá series</AlertDialogTitle>
             <AlertDialogDescription>
-              Bạn thật sự muốn xóa bài viết này?
+              Bạn thật sự muốn xóa series này?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

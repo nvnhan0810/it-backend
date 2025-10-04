@@ -46,4 +46,39 @@ class SeriesController extends Controller
 
         return redirect()->route('admin.series.index');
     }
+
+    public function edit(int $id)
+    {
+        $series = Series::with(['posts'])->find($id);
+
+        return Inertia::render('private/series/EditPage', [
+            'series' => $series,
+            'posts' => Post::orderBy('title', 'ASC')->get(),
+        ]);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $series = Series::findOrFail($id);
+
+        $series->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        $series->posts()->sync($request->posts);
+
+        return redirect()->route('admin.series.index');
+    }
+
+    public function destroy(int $id)
+    {
+        $series = Series::findOrFail($id);
+
+        $series->posts()->detach();
+
+        $series->delete();
+
+        return redirect()->route('admin.series.index');
+    }
 }

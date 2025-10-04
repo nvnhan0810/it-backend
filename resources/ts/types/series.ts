@@ -8,5 +8,5 @@ export type Series = {
   created_at: string;
   updated_at: string;
 
-  posts: Post[];
+  posts: Array<Post & { pivot: { order: number } }>;
 };

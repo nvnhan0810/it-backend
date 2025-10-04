@@ -15,6 +15,8 @@ class Series extends Model
     /***** RELATIONSHIPS *****/
     public function posts()
     {
-        return $this->belongsToMany(Post::class, 'series_posts', 'series_id', 'post_id')->orderBy('order');
+        return $this->belongsToMany(Post::class, 'series_posts', 'series_id', 'post_id')
+            ->withPivot('order')
+            ->orderBy('order');
     }
 }

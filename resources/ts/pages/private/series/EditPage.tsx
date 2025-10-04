@@ -5,12 +5,14 @@ import { Label } from "@/ts/components/ui/label";
 import { Textarea } from "@/ts/components/ui/textarea";
 import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
 import { Post } from "@/ts/types/post";
+import { Series } from "@/ts/types/series";
 import { router } from "@inertiajs/react";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { useRoute } from "ziggy-js";
 
 type Props = RootProps & {
+  series: Series;
   posts: Post[];
 }
 
@@ -19,12 +21,15 @@ type SeriesPost = {
   post_id: number;
 }
 
-const CreatePage = ({ auth, posts }: Props) => {
+const EditPage = ({ auth, series, posts }: Props) => {
   const route = useRoute();
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [seriesPosts, setSeriesPosts] = useState<SeriesPost[]>([]);
+  const [title, setTitle] = useState(series.name);
+  const [description, setDescription] = useState(series.description);
+  const [seriesPosts, setSeriesPosts] = useState<SeriesPost[]>(series.posts.map((post) => ({
+    order: post.pivot.order,
+    post_id: post.id,
+  })));
 
   const handleAddNewPostRow = () => {
     const newPostRow: SeriesPost = {
@@ -61,8 +66,8 @@ const CreatePage = ({ auth, posts }: Props) => {
     setSeriesPosts(seriesPosts.filter((_, i) => i !== index));
   }
 
-  const handleCreate = () => {
-    router.post(route('admin.series.store'), {
+  const handleUpdate = () => {
+    router.patch(route('admin.series.update', { id: series.id }), {
       name: title,
       description: description,
       'posts': seriesPosts.map((seriesPost) => ({
@@ -74,7 +79,7 @@ const CreatePage = ({ auth, posts }: Props) => {
         router.visit(route('admin.series.index'));
       },
       onError: (errors) => {
-        console.error('Create series failed:', errors);
+        console.error('Update series failed:', errors);
       }
     });
   }
@@ -87,7 +92,7 @@ const CreatePage = ({ auth, posts }: Props) => {
           <Input name="name" placeholder="Tên series" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <div className="mb-2">
-          <Textarea name="description" placeholder="Mô tả series" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Textarea name="description" placeholder="Mô tả series" value={description ?? ''} onChange={(e) => setDescription(e.target.value)} />
         </div>
 
         <div className="flex justify-between">
@@ -116,10 +121,10 @@ const CreatePage = ({ auth, posts }: Props) => {
         </div>
       </div>
       <div className="flex justify-center mt-4">
-        <Button onClick={handleCreate}>Tạo series</Button>
+        <Button onClick={handleUpdate}>Cập nhật series</Button>
       </div>
     </PrivateLayout>
   );
 };
 
-export default CreatePage;
+export default EditPage;

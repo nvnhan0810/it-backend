@@ -26,7 +26,7 @@ class AuthController extends Controller
                 'avatar' => $ggUser->avatar,
             ]);
 
-            Auth::login($user);
+            Auth::login($user, true);
 
             return redirect()->intended('/');
         }
