@@ -19,9 +19,10 @@ Route::prefix('auth')->group(function () {
 Route::get('/', [PostController::class, 'index'])->name('home');
 Route::get('/posts/{slug}', [PostController::class, 'show'])->name('posts.show');
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [AdminPostController::class, 'index'])->name('index');
 
