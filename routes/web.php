@@ -8,17 +8,20 @@ use App\Http\Controllers\Public\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/login', function () {
+        abort(403);
+    })->name('login');
+
+    Route::get('/google/login', [AuthController::class, 'login'])->name('google.login');
     Route::get('/callback', [AuthController::class, 'callback'])->name('login.callback');
 });
 
 Route::get('/', [PostController::class, 'index'])->name('home');
 Route::get('/posts/{slug}', [PostController::class, 'show'])->name('posts.show');
 
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
-Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [AdminPostController::class, 'index'])->name('index');
 
@@ -27,4 +30,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('tags', AdminTagController::class)->except(['show', 'create', 'store']);
 
     Route::resource('series', AdminSeriesController::class)->except(['show']);
-})->middleware('auth');
+});

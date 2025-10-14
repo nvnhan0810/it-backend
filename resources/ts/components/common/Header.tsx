@@ -79,7 +79,7 @@ const Header = ({ auth }: { auth: AuthUser | null }) => {
         </a>
 
         {!auth ? (
-          <a href={route('login')} className="text-gray-300 hover:text-gray-500 transition-colors duration-200 p-2">
+          <a href={route('google.login')} className="text-gray-300 hover:text-gray-500 transition-colors duration-200 p-2">
             <CircleUserRound className="w-6 h-6 text-gray-300" />
           </a>
         ) : (
