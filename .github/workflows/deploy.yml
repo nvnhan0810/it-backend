@@ -99,6 +99,7 @@ jobs:
             php8.4 artisan optimize
             export FNM_DIR="$HOME/.local/share/fnm"
             [ -s "$FNM_DIR/fnm.sh" ] && source "$FNM_DIR/fnm.sh"
+            eval "$(fnm env)"
             fnm use 22
             npm ci
             php8.4 artisan ziggy:generate resources/ts/utils/ziggy --types
