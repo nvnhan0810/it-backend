@@ -66,6 +66,7 @@ class SeriesController extends Controller
             'description' => $request->description,
         ]);
 
+        $series->posts()->detach();
         $series->posts()->sync($request->posts);
 
         return redirect()->route('admin.series.index');
