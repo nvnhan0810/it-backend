@@ -1,8 +1,8 @@
-import { Post } from "@/ts/types/post";
+import type { Post } from "@/ts/types/post";
 import PostItemForm from "./PostItemForm";
 import {
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,

@@ -1,35 +1,11 @@
 import { Button } from "@/ts/components/ui/button";
-import Combobox from "@/ts/components/ui/combobox";
 import { Input } from "@/ts/components/ui/input";
-import { Label } from "@/ts/components/ui/label";
 import { Textarea } from "@/ts/components/ui/textarea";
-import PrivateLayout, { RootProps } from "@/ts/layouts/PrivateLayout";
-import { Post } from "@/ts/types/post";
+import PrivateLayout, { type RootProps } from "@/ts/layouts/PrivateLayout";
+import type { Post } from "@/ts/types/post";
 import { router } from "@inertiajs/react";
-import { ArrowUpIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { useRoute } from "ziggy-js";
-import {
-  useSensors,
-  useSensor,
-  PointerSensor,
-  KeyboardSensor,
-  DndContext,
-  DragEndEvent,
-  Active,
-  Over,
-  closestCenter,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { SeriesPost } from "@/ts/types/series";
-import PostItemForm from "@/ts/components/series/PostItemForm";
 import PostListForm from "@/ts/components/series/PostListForm";
 
 type Props = RootProps & {
@@ -69,8 +45,6 @@ const CreatePage = ({ auth, posts }: Props) => {
     );
   };
 
-
-
   return (
     <PrivateLayout auth={auth}>
       <h2 className="text-2xl font-bold text-gray-100 text-center">
@@ -94,7 +68,11 @@ const CreatePage = ({ auth, posts }: Props) => {
           />
         </div>
 
-        <PostListForm posts={posts} initSerialPosts={[]} onChangeSerialPosts={handleChangeSerialPosts} />
+        <PostListForm
+          posts={posts}
+          initSerialPosts={[]}
+          onChangeSerialPosts={handleChangeSerialPosts}
+        />
       </div>
       <div className="flex justify-center mt-4">
         <Button onClick={handleCreate}>Tạo series</Button>

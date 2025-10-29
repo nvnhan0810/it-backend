@@ -1,9 +1,4 @@
-import { Post } from "@/ts/types/post";
-
-export type SeriesPost = {
-  order: number;
-  post_id: number;
-};
+import type { Post } from "@/ts/types/post";
 
 export type Series = {
   id: number;
