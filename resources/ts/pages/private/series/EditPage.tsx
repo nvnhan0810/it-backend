@@ -26,7 +26,6 @@ const EditPage = ({ auth, series, posts }: Props) => {
   const [seriesPosts, setSeriesPosts] = useState<number[]>(initSerialPosts);
 
   const handleChangeSerialPosts = (result: number[]) => {
-    console.log("result: ", result);
     setSeriesPosts([...result]);
   };
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Series;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -44,8 +45,13 @@ class PostController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $series = Series::with(['posts'])->whereHas('posts', function($query) use ($post) {
+            $query->where('post_id', $post->id);
+        })->get();
+
         return Inertia::render('public/posts/ShowPage', [
             'post' => $post,
+            'series' => $series,
         ]);
     }
 }
