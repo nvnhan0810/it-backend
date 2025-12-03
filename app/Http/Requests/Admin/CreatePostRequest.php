@@ -29,6 +29,8 @@ class CreatePostRequest extends FormRequest
             'published_at' => 'nullable|date',
             'tags' => 'nullable|array',
             'tags.*' => 'required|string',
+            'series_ids' => 'nullable|array',
+            'series_ids.*' => 'required|integer',
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreatePostRequest;
 use App\Http\Requests\Admin\UpdatePostRequest;
 use App\Models\Post;
+use App\Models\Series;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,11 @@ class PostController extends Controller
     }
 
     public function create() {
-        return Inertia::render('private/posts/CreatePage');
+        $series = Series::all();
+
+        return Inertia::render('private/posts/CreatePage', [
+            'series' => $series,
+        ]);
     }
 
     public function store(CreatePostRequest $request) {
@@ -57,6 +62,8 @@ class PostController extends Controller
 
             $post->load(['tags']);
 
+            $this->syncSeries($post, $request->series_ids);
+
             DB::commit();
 
             return redirect()->route('admin.index');
@@ -74,9 +81,14 @@ class PostController extends Controller
 
     public function edit(int $id) {
         $post = Post::with(['tags'])->findOrFail($id);
+        $series = Series::all();
+
+        $selectedSeriesIds = $post->series->pluck('id')->toArray();
 
         return Inertia::render('private/posts/EditPage', [
             'post' => $post,
+            'series' => $series,
+            'selectedSeriesIds' => $selectedSeriesIds,
         ]);
     }
 
@@ -108,6 +120,8 @@ class PostController extends Controller
 
             $post->load(['tags']);
 
+            $this->syncSeries($post, $request->series_ids);
+
             DB::commit();
 
             return redirect()->route('admin.index');
@@ -121,6 +135,32 @@ class PostController extends Controller
 
             return back()->withErrors('Update post failed');
         }
+    }
+
+    private function syncSeries(Post $post, ?array $seriesIds = []) {
+        if (!$seriesIds) {
+            $seriesIds = [];
+        }
+
+        $installedSeries = $post->series;
+
+        foreach($seriesIds as $seriesId) {
+            $installed = $installedSeries->where('id', $seriesId)->first();
+
+            if (!$installed) {
+                $series = Series::find($seriesId);
+
+                if (!$series) {
+                    continue;
+                }
+
+                $order = $series->posts()->count() + 1;
+
+                $post->series()->attach($seriesId, ['order' => $order]);
+            }
+        }
+
+        $post->series()->sync($seriesIds);
     }
 
     public function destroy(int $id) {
