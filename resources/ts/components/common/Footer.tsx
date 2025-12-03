@@ -1,7 +1,11 @@
 const Footer = () => {
   return (
-    <footer className="text-center text-gray-300 text-sm py-4 border-t border-gray-700">
-      <p>Copyright © 2025 - <a href="mailto:nguyenvannhan0810@gmail.com">nvnhan0810</a></p>
+    <footer className="border-t border-border bg-muted/40">
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <p className="text-center text-sm text-muted-foreground">
+          Copyright © {new Date().getFullYear()} - <a href="mailto:nguyenvannhan0810@gmail.com" className="hover:text-foreground transition-colors">nvnhan0810</a>
+        </p>
+      </div>
     </footer>
   );
 };

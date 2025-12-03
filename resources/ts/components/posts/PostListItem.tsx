@@ -11,25 +11,27 @@ const PostListItem = ({ post }: { post: Post }) => {
     <Link
       key={post.id}
       href={routes('posts.show', { slug: post.slug })}
-      className="block bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-lg p-5 shadow-sm hover:shadow-md hover:bg-white/90 transition-all duration-200 overflow-hidden flex flex-col justify-between"
+      className="group flex flex-col h-full bg-card hover:bg-accent/50 border border-border rounded-xl p-5 transition-all duration-300 hover:shadow-lg"
     >
-      <h2 className="line-clamp-2 text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-200">
-        {post.title}
-      </h2>
+      <div className="flex-grow">
+        <h2 className="line-clamp-2 text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+          {post.title}
+        </h2>
 
-      {post.description && (
-        <p className="text-gray-600 text-sm leading-relaxed mb-3 line-clamp-3">
-          {post.description}
-        </p>
-      )}
+        {post.description && (
+          <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">
+            {post.description}
+          </p>
+        )}
+      </div>
 
       {post.public_tags != undefined && post.public_tags.length > 0 && (
-        <div className="flex flex-wrap overflow-auto gap-2">
+        <div className="mt-4 pt-4 border-t border-border flex flex-wrap gap-2">
           {post.public_tags.map((item: Tag) => (
             <TagBadge
               key={item.id}
               tag={item}
-              classes="text-xs bg-gray-100 text-gray-700 border-gray-200 text-gray-300"
+              classes="text-xs py-1 px-2"
               useLink={false}
             />
           ))}

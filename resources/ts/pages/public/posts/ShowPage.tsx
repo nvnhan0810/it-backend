@@ -9,14 +9,12 @@ type Props = RootProps & {
 const PostDetailPage = ({ post, auth }: Props) => {
   return (
     <PublicLayout auth={auth}>
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-12 md:col-span-3"></div>
-        <div className="col-span-12 md:col-span-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-card border border-border rounded-xl p-6 md:p-10 shadow-sm">
           <PostDetail post={post} useTagLink={true} />
         </div>
-      <div className="col-span-12 md:col-span-3"></div>
-    </div>
-    </PublicLayout >
+      </div>
+    </PublicLayout>
   );
 };
 

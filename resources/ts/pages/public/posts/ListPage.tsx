@@ -13,7 +13,6 @@ import { useRoute } from "ziggy-js";
 const ListPage = ({ posts, tags, auth }: { posts: Pagination<Post>, tags: Tag[], auth: AuthUser | null }) => {
 
   const route = useRoute();
-
   const { data } = posts;
 
   const handleSearch = (search: string) => {
@@ -24,30 +23,59 @@ const ListPage = ({ posts, tags, auth }: { posts: Pagination<Post>, tags: Tag[],
     });
   };
 
+  const queryParams = new URLSearchParams(window.location.search);
+  const currentTag = queryParams.get('tag');
+
   return (
     <PublicLayout auth={auth}>
-      <div className="mb-4 flex justify-start items-center gap-2">
-        <SearchForm onSearch={handleSearch} />
-      </div>
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-12 md:col-span-8 lg:col-span-9 2xl:col-span-10 flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {data.map((post: Post) => (
-              <PostListItem key={post.id} post={post} />
-            ))}
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Main Content */}
+        <div className="flex-1 min-w-0">
+          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              {currentTag ? `Posts tagged "${currentTag}"` : 'Latest Posts'}
+            </h1>
+            <div className="w-full sm:w-auto">
+              <SearchForm onSearch={handleSearch} />
+            </div>
+          </div>
 
-          </div>
-          <div className="flex items-center justify-center my-3">
-            <PaginationBar pagination={posts} />
-          </div>
+          {data.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {data.map((post: Post) => (
+                  <PostListItem key={post.id} post={post} />
+                ))}
+              </div>
+              <div className="mt-8 flex justify-center">
+                <PaginationBar pagination={posts} />
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No posts found.</p>
+            </div>
+          )}
         </div>
-        <div className="pl-4 border-l border-gray-200 col-span-12 md:col-span-4 lg:col-span-3 2xl:col-span-2">
-          <div className="flex flex-wrap gap-2">
-            {tags.map((tag: Tag) => (
-              <TagBadge key={tag.id} tag={tag} useLink={true} />
-            ))}
+
+        {/* Sidebar */}
+        <aside className="lg:w-80 flex-shrink-0">
+          <div className="sticky top-24 space-y-8">
+            <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+              <h3 className="font-semibold text-lg mb-4 text-foreground">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag: Tag) => (
+                  <TagBadge 
+                    key={tag.id} 
+                    tag={tag} 
+                    useLink={true} 
+                    classes={currentTag === tag.slug ? "bg-primary text-primary-foreground hover:bg-primary/90" : ""}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </aside>
       </div>
     </PublicLayout>
   );

@@ -3,26 +3,40 @@ import { cn } from "@/ts/utils";
 import { Link } from "@inertiajs/react";
 import { useRoute } from "ziggy-js";
 
-const TagBadge = ({ tag, classes = '', useLink = true }: { tag: Tag, classes?: string, useLink?: boolean, }) => {
+interface TagBadgeProps {
+  tag: Tag;
+  classes?: string;
+  useLink?: boolean;
+}
+
+const TagBadge = ({ tag, classes = '', useLink = true }: TagBadgeProps) => {
   const routes = useRoute();
 
-  return (tag.public_posts_count == undefined || tag.public_posts_count > 0) && (useLink ? (
-    <Link href={routes('home', { tag: tag.slug })}>
-      <span className={cn(
-        "inline-block border rounded-full px-3 py-1 text-sm hover:bg-gray-300 text-nowrap bg-gray-500 text-white hover:text-gray-900",
-        classes
-      )}>
-        {tag.name.replace(/([a-z])([A-Z])/g, '$1 $2').trim()}
-      </span>
-    </Link>
-  ) : (
-    <span className={cn(
-      "inline-block border rounded-full px-3 py-1 text-sm text-nowrap dark:bg-gray-500",
-      classes
-    )}>
-      {tag.name.replace(/([a-z])([A-Z])/g, '$1 $2').trim()}
+  // Format tag name: camelCase to Title Case if needed, or just display as is
+  const displayName = tag.name.replace(/([a-z])([A-Z])/g, '$1 $2').trim();
+
+  const baseClasses = "inline-flex items-center border rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
+  const defaultColorClasses = "bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent";
+
+  if ((tag.public_posts_count !== undefined && tag.public_posts_count === 0)) {
+    return null;
+  }
+
+  if (useLink) {
+    return (
+      <Link href={routes('home', { tag: tag.slug })}>
+        <span className={cn(baseClasses, defaultColorClasses, classes)}>
+          {displayName}
+        </span>
+      </Link>
+    );
+  }
+
+  return (
+    <span className={cn(baseClasses, defaultColorClasses, classes)}>
+      {displayName}
     </span>
-  ));
+  );
 };
 
 export default TagBadge;
